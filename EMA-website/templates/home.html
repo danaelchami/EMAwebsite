@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMA - Enhanced Mail Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="EMA Logo" id="logo">
+
+                <span>EMA</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <div class="cta-buttons">
+                <span style="font-weight: 500; color: var(--primary-color); margin-right: 1rem;">
+                    {{ user.full_name }}
+                </span> 
+                <div class="profile-circle">{{ user.full_name[0] }}</div>
+                <a href="{{ url_for('logout') }}" class="button secondary-button">Logout</a>
+            </div>
+            
+            
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <span class="overline">Introducing</span>
+                <h1>A smarter way to manage your email</h1>
+                <p><p>Hi {{ user.full_name.split(' ')[0] }}, EMA is ready to summarize your emails and boost your productivity today!</p>
+            </p>
+                <div class="hero-cta">
+                   <a href="{{ url_for('static', filename='ema-extension.zip') }}" download class="button primary-button">
+  Download EMA Chrome Extension
+</a>
+
+<p style="margin-top: 10px; font-size: 14px;">
+  <strong>How to install:</strong><br>
+  1. Download and unzip the extension<br>
+  2. Go to <code>chrome://extensions/</code><br>
+  3. Enable <strong>Developer mode</strong> (top right)<br>
+  4. Click “Load Unpacked” and select the unzipped folder
+</p>
+
+                      
+                      
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="{{ url_for('static', filename='images/hero-image.png') }}" alt="EMA in action">
+
+        </section>
+       
+
+  
+ 
+    <div class="section-divider"></div>
+    
+    
+        <section class="showcase">
+            <div class="showcase-header">
+                <span class="subheading">A closer look</span>
+                <h2>Designed for simplicity and efficiency</h2>
+                <p>EMA integrates seamlessly with your email workflow, offering powerful features without compromising the user experience.</p>
+            </div>
+            <div class="demo-video">
+                <img src="{{ url_for('static', filename='images/demo-placeholder.jpg') }}" alt="EMA demo" class="video-placeholder">
+
+                <div class="play-button">
+                    <i class="fas fa-play"></i>
+                </div>
+            </div>
+        </section>
+  
+
+
+    <div class="section-divider"></div>
+
+      
+        <section id="faq" class="faq">
+            <div class="section-header">
+                <span class="subheading">FAQ</span>
+                <h2>Questions & answers</h2>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>Is EMA free to use?</h3>
+                    <p>Yes, EMA offers a free tier with essential features. We also offer premium plans for users who need advanced capabilities and higher usage limits.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is my email data secure?</h3>
+                    <p>Absolutely. EMA uses industry-standard encryption and never stores the content of your emails on our servers. Your privacy and data security are our top priorities.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Which email providers are supported?</h3>
+                    <p>EMA currently works with Gmail, Outlook, and Yahoo Mail. We're actively working on adding support for additional email providers.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Do I need to create an account?</h3>
+                    <p>A simple account is required to use EMA, which helps us provide a personalized experience and save your preferences across devices.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>How accurate are the AI summaries?</h3>
+                    <p>Our AI models are trained on millions of emails and continuously improved. Summaries are highly accurate for most business and personal emails.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Does EMA work offline?</h3>
+                    <p>While some basic features may work without an internet connection, EMA requires connectivity to access its AI capabilities and synchronize with your email providers.</p>
+                </div>
+            </div>
+        </section>
+
+    <div class="section-divider"></div>
+ 
+    
+        <section id="pricing" class="pricing">
+            <div class="section-header">
+                <span class="subheading">Pricing</span>
+                <h2>Choose the right plan for you</h2>
+                <p>Whether you're an individual or a business, we have options to meet your needs.</p>
+            </div>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Free</h3>
+                        <p class="price">$0</p>
+                        <p class="billing-cycle">forever</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Email summaries (10/day)</li>
+                        <li>Basic calendar integration</li>
+                        <li>Limited AI chat queries</li>
+                        <li>Standard support</li>
+                    </ul>
+                    <a href="#" class="button secondary-button">Get Started</a>
+                </div>
+                <div class="pricing-card highlighted">
+                    <div class="popular-tag">Most Popular</div>
+                    <div class="pricing-header">
+                        <h3>Pro</h3>
+                        <p class="price">$4.99</p>
+                        <p class="billing-cycle">per month</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Unlimited email summaries</li>
+                        <li>Advanced calendar features</li>
+                        <li>Unlimited AI chat</li>
+                        <li>Smart reply suggestions</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#" class="button primary-button">Upgrade Now</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Team</h3>
+                        <p class="price">$9.99</p>
+                        <p class="billing-cycle">per user/month</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Everything in Pro</li>
+                        <li>Team collaboration features</li>
+                        <li>Admin dashboard</li>
+                        <li>Custom integrations</li>
+                        <li>Dedicated support</li>
+                    </ul>
+                    <a href="#" class="button secondary-button">Contact Sales</a>
+                </div>
+            </div>
+        </section>
+
+        
+    </main>
+   
+    <div class="section-divider"></div>
+   
+    
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-column">
+                <div class="footer-logo">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="EMA Logo">
+
+                    <span>EMA</span>
+                </div>
+                <p>Enhanced Mail Assistant - Your AI-powered email companion for a more productive inbox.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#">Roadmap</a></li>
+                    <li><a href="#">Updates</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Guide</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Legal</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 EMA - Enhanced Mail Assistant. All rights reserved.</p>
+            <div class="legal-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="js/download.js"></script>
+</body>
+</html> 

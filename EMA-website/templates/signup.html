@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up - EMA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Create an EMA Account</h2>
+        <form method="POST">
+            
+                <input type="text" name="full_name" placeholder="Full Name" required>
+                <input type="email" name="username" placeholder="Email" required pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$">
+                <input type="tel" name="phone" placeholder="Phone (e.g. +96170123456)" required pattern="^\+\d{11,14}$">
+                <input type="password" name="password" placeholder="Password (min 8 characters)" required minlength="8">
+                <button type="submit" class="button primary-button">Sign Up</button>
+                <p>Already have an account? <a href="{{ url_for('login') }}">Log In</a></p>
+        </form>
+    </div>
+</body>
+</html>

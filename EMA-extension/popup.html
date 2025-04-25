@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
+  <title>Your Daily Summary</title>
+  <style>
+    /* Global Reset/Defaults */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", "Montserrat", "Inter", sans-serif;
+    }
+ 
+    body {
+  height: 700px;
+  width: 500px;
+  background: linear-gradient(-45deg, #b0cfe6, #ea98f1, #8cc9ac, #f0bdd7);
+  background-size: 400% 400%;
+  animation: animatedGradient 12s ease infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #222;
+  font-family: "Poppins", sans-serif;
+}
+
+
+
+    /* Main container for all content */
+    .container {
+      width: 95%;
+      max-width: 550px;
+      margin: 20px auto;
+      background-color: rgba(255, 255, 255, 0.9); /* More opaque for better readability */
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Header section */
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .logo-container {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      color: #b1aaaa;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      background: linear-gradient(90deg, #6366f1, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      font-size: 1rem;
+      color: #4b4b4b;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      font-weight: 300;
+    }
+
+    /* Email Selection Options */
+    .email-options {
+      display: flex;
+      flex-wrap: wrap; /* Allow wrapping for better mobile display */
+      align-items: center;
+      margin-bottom: 20px;
+      background-color: white;
+      border-radius: 12px;
+      padding: 14px 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      margin-right: 10px;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .email-options label {
+      font-size: 0.9rem;
+      color: #555;
+      margin-right: 10px;
+      font-weight: 500;
+    }
+
+    .email-filter {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background-color: white;
+      font-size: 0.9rem;
+      color: #333;
+      transition: all 0.2s ease;
+    }
+    
+    .email-filter:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(110, 231, 215, 0.2);
+      outline: none;
+    }
+
+    .refresh-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      border: none;
+      padding: 10px 14px;
+      margin: 0 auto;
+      display: block;
+    
+      cursor: pointer;
+      color: white;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(99, 241, 158, 0.3);
+      white-space: nowrap;
+    }
+
+    .refresh-button:hover {
+      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.4);
+    }
+
+    .refresh-button svg {
+      margin-right: 5px;
+    }
+    
+    .small-refresh-button {
+      padding: 6px;
+      border-radius: 6px;
+      margin-left: 6px;
+    }
+    
+    .small-refresh-button svg {
+      margin-right: 0;
+    }
+
+    /* Email Summary Section */
+    .summary-section {
+      margin: 20px 0;
+      background-color: white;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .summary-section h3 {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 8px;
+      background: linear-gradient(90deg, #6366f1, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    .email-summary-content {
+      font-size: 0.95rem;
+      color: #555;
+      min-height: 50px;
+      line-height: 1.5;
+      padding: 3px 0;
+    }
+
+    .email-summary-content p {
+      margin: 0;
+    }
+
+    .summary-placeholder {
+      color: #999;
+      font-style: italic;
+      text-align: center;
+      padding: 5px 0;
+    }
+
+    .summary-category {
+      margin-bottom: 15px;
+    }
+
+    .summary-category h4 {
+      font-size: 0.95rem;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .summary-category ul {
+      list-style-type: none;
+      padding-left: 10px;
+    }
+
+    .summary-category li {
+      margin-bottom: 6px;
+      padding-left: 15px;
+      position: relative;
+    }
+
+    .summary-category li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #8b5cf6;
+    }
+
+    /* Calendar events section */
+    .calendar-events-section {
+      margin: 20px 0;
+      background-color: white;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .calendar-events-section h3 {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(90deg, #6366f1, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    .calendar-events-section h3 .refresh-events {
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: #6366f1;
+    }
+
+    .calendar-events-section h3 .refresh-events svg {
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
+    }
+
+    .calendar-events-content {
+      max-height: 250px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    
+    .calendar-events-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .calendar-events-content::-webkit-scrollbar-track {
+      background: #f0f0f0;
+      border-radius: 10px;
+    }
+    
+    .calendar-events-content::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, #6366f1, #ec4899);
+      border-radius: 10px;
+    }
+
+    .events-placeholder {
+      color: #999;
+      font-style: italic;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .event-item {
+      border-radius: 12px;
+      background-color: #f9f9f9;
+      margin-bottom: 12px;
+      padding: 14px;
+      border-left: 4px solid #6366f1;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    
+    .event-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .event-item.added {
+      opacity: 0.7;
+      border-left-color: #22c55e;
+    }
+
+    .event-title {
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .event-info {
+      display: flex;
+      margin-bottom: 5px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .event-date {
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .event-date svg, 
+    .event-time svg, 
+    .event-location svg {
+      width: 12px;
+      height: 12px;
+      margin-right: 4px;
+      color: #6366f1;
+    }
+
+    .event-time {
+      display: flex;
+      align-items: center;
+    }
+
+    .event-location {
+      margin-top: 5px;
+      font-size: 0.85rem;
+      color: #666;
+      display: flex;
+      align-items: center;
+    }
+
+    .event-description {
+      margin-top: 5px;
+      font-size: 0.85rem;
+      color: #777;
+      line-height: 1.4;
+    }
+
+    .event-actions {
+      display: flex;
+      margin-top: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .add-to-calendar,
+    .show-email {
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 5px rgba(99, 102, 241, 0.3);
+    }
+
+    .add-to-calendar svg,
+    .show-email svg {
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
+    }
+
+    .add-to-calendar:hover,
+    .show-email:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.4);
+    }
+
+    .add-to-calendar:disabled {
+      background: linear-gradient(90deg, #c2c9e7, #d0d6ef);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .show-email {
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+      box-shadow: 0 2px 5px rgba(34, 197, 94, 0.3);
+    }
+
+    .show-email:hover {
+      box-shadow: 0 4px 8px rgba(34, 197, 94, 0.4);
+    }
+
+    .event-added-badge {
+      background-color: #22c55e;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .events-control {
+      margin-bottom: 12px;
+      font-size: 0.8rem;
+      color: #666;
+      display: flex;
+      align-items: center;
+    }
+
+    .events-control label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .events-control input[type="checkbox"] {
+      margin-right: 6px;
+    }
+
+    .spinning {
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Chat Section */
+    .chat-container {
+      margin: 20px 0;
+      background-color: white;
+      border-radius: 16px;
+      padding: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      height: 300px;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: linear-gradient(90deg,  #67e983,#9193f3, #e476ad,#67e983);
+      color: white;
+      padding: 14px 18px;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .chatbox {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .chatbox::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .chatbox::-webkit-scrollbar-track {
+      background: #f0f0f0;
+      border-radius: 10px;
+    }
+    
+    .chatbox::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, #6366f1, #ec4899);
+      border-radius: 10px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 10px 16px;
+      border-radius: 18px;
+      line-height: 1.5;
+      font-size: 0.9rem;
+      position: relative;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .user {
+      background: linear-gradient(135deg, #e2e8f0, #f1f5f9);
+      color: #333;
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+    }
+
+    .bot {
+      background: linear-gradient(135deg, #ede9fe, #f5f3ff);
+      color: #333;
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+    }
+
+    .chat-input-container {
+      display: flex;
+      padding: 12px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .chat-input {
+      flex: 1;
+      border: 1px solid #e0e0e0;
+      border-radius: 24px;
+      padding: 10px 18px;
+      outline: none;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .chat-input:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    }
+
+    .send-button, .mic-button {
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-left: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(99, 102, 241, 0.3);
+    }
+
+    .send-button:hover, .mic-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.4);
+    }
+
+    .send-button svg, .mic-button svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .mic-button.active {
+      background: linear-gradient(90deg, #ef4444, #dc2626);
+      animation: pulse 1.5s infinite;
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+      }
+    }
+    
+    /* Helper for visually hiding elements but keeping them accessible */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    .api-limit-note {
+      display: flex;
+      align-items: center;
+      background-color: #fef3c7;
+      color: #92400e;
+      padding: 8px 12px;
+      margin: 5px 0 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .api-limit-note svg {
+      color: #92400e;
+      margin-right: 8px;
+    }
+
+    .email-link {
+      display: inline-block;
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      color: white;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      margin-top: 5px;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 5px rgba(99, 102, 241, 0.3);
+    }
+
+    .email-link:hover {
+      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.4);
+    }
+    
+    /* Styling for the View All Fetched Emails button */
+    #open-emails-page {
+      background: linear-gradient(90deg, #6366f1, #ec4899);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    }
+    
+    #open-emails-page:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Styling for Hide Emails button */
+    #hide-emails-btn {
+      display: none;
+      margin-top: 10px;
+      background: linear-gradient(90deg, #64748b, #94a3b8);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    }
+    
+    #hide-emails-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    @keyframes animatedGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo-container">
+        <img src="logo.png" alt="EMA Logo" class="logo-img">
+      </div>
+      <h1>Enhanced Mail Assistant</h1>
+      <p>Your personalized email summary</p>
+    </div>
+
+    <!-- Email selection options -->
+    <div class="email-options">
+      <div class="filter-group">
+        <label for="email-filter">Time period:</label>
+        <select id="email-filter" class="email-filter">
+          <option value="week">Past week</option>
+          <option value="month">Past month</option>
+          <option value="year">Past year</option>
+          <option value="all">All emails</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label for="read-filter">Status:</label>
+        <select id="read-filter" class="read-filter">
+          <option value="all">All</option>
+          <option value="unread">Unread only</option>
+          <option value="read">Read only</option>
+        </select>
+      </div>
+      
+      <button id="refresh-emails" class="refresh-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+        Refresh
+      </button>
+    </div>
+
+    <!-- Email Summary Section -->
+    <div class="summary-section">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3>Email Summary</h3>
+        <button id="refresh-summary" class="refresh-button small-refresh-button" title="Regenerate summary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+        </button>
+      </div>
+      <div id="email-summary" class="email-summary-content">
+        <p class="summary-placeholder">Loading your email summary...</p>
+      </div>
+    </div>
+    <!-- Scrollable Fetched Emails Box -->
+<div class="calendar-events-section" style="margin-top: 20px;">
+  <h3>Fetched Emails</h3>
+  <div id="fetched-emails" class="calendar-events-content" style="max-height: 250px; overflow-y: auto;">
+    <p class="events-placeholder">No emails fetched yet.</p>
+  </div>
+</div>
+
+    <!-- Fetch All Emails Page Button -->
+<div style="text-align: center; margin-top: 10px;">
+  <button id="open-emails-page">
+     View All Fetched Emails
+  </button>
+</div>
+<button id="hide-emails-btn">
+  Hide Emails
+</button>
+
+
+
+    <!-- Calendar Events Section -->
+    <div class="calendar-events-section">
+      <h3>
+        Possible Calendar Events
+        <span class="refresh-events" id="refresh-events">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+          Refresh
+        </span>
+      </h3>
+      <div id="calendar-events" class="calendar-events-content">
+        <p class="events-placeholder">Scanning emails for calendar events...</p>
+      </div>
+    </div>
+
+    <!-- Chat Section -->
+    <div class="chat-container">
+      <div class="chat-header">Ask EMA</div>
+      <div id="chatbox" class="chatbox">
+        <!-- Messages will appear here -->
+      </div>
+      <div class="chat-input-container">
+        <input type="text" id="chat-input" class="chat-input" placeholder="Ask a question about your emails...">
+        <button id="mic-button" class="mic-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+
+
+          <span class="sr-only">Speak</span>
+        </button>
+        <button id="send-button" class="send-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          <span class="sr-only">Send</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>
