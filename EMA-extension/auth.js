@@ -3,12 +3,12 @@ export function authenticateUser(callback) {
     chrome.identity.getAuthToken({ 
       interactive: true,
       scopes: [
-        
         "https://www.googleapis.com/auth/gmail.readonly",
         "https://www.googleapis.com/auth/userinfo.email",
         "https://www.googleapis.com/auth/calendar",
         "https://www.googleapis.com/auth/calendar.events",
-        "https://www.googleapis.com/auth/gmail.send"
+        "https://www.googleapis.com/auth/gmail.send",
+        "https://www.googleapis.com/auth/contacts.readonly"
       ]
       
     }, function (token) {
@@ -36,7 +36,9 @@ export function forceReauthenticate(callback) {
                 "https://www.googleapis.com/auth/gmail.readonly",
                 "https://www.googleapis.com/auth/userinfo.email",
                 "https://www.googleapis.com/auth/calendar",
-                "https://www.googleapis.com/auth/calendar.events"
+                "https://www.googleapis.com/auth/calendar.events",
+                "https://www.googleapis.com/auth/gmail.send",
+                "https://www.googleapis.com/auth/contacts.readonly"
             ]
         }, function (token) {
             if (chrome.runtime.lastError) {

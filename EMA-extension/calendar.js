@@ -1,6 +1,6 @@
 // calendar.js
 import { standardizeDate, convertTimeToISO, getEndTime } from './utils.js';
-import { markEventAsAdded, markEventAsNotAdded, getEventsFromCache } from './storage.js';
+import { markEventAsAdded, markEventAsNotAdded, getEventsFromDB } from './storage.js';
 
 // Fetch events from Google Calendar
 export async function fetchCalendarEvents(token, timeMin, timeMax) {
@@ -110,75 +110,82 @@ export async function verifyEventInCalendar(token, event) {
   
 // Add event to Google Calendar
 export async function addEventToCalendar(token, event) {
-    try {
-      // First, verify if the event already exists in the calendar
-      const eventExists = await verifyEventInCalendar(token, event);
-      if (eventExists) {
-        console.log("✅ Event already exists in calendar:", event.title);
-        // Mark as added in our system
-        if (!event.id) {
-          console.warn("❌ Cannot mark event as added: missing event ID", event);
-        } else {
+// Send the event to the background script to add to Calendar
+      try {
+        // First, verify if the event already exists in the calendar
+        const eventExists = await verifyEventInCalendar(token, event);
+        if (eventExists) {
+          console.log("✅ Event already exists in calendar:", event.title);
+          // Mark as added in our system
           await markEventAsAdded(event.id);
+          return { id: "existing-event", exists: true };
+        }
+
+        // Format the event for Google Calendar API
+        const calendarEvent = {
+          'summary': event.title,
+          'location': event.location || '',
+          'description': event.description || '',
+          'start': {
+            'dateTime': `${event.date}T${convertTimeToISO(event.time) || '09:00:00'}`,
+            'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+          },
+          'end': {
+            'dateTime': `${event.date}T${getEndTime(event.time) || '10:00:00'}`,
+            'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+          }
+        };
+        
+        console.log("🔄 Attempting to add event to calendar:", calendarEvent);
+        
+        // Call Google Calendar API to create event
+        const response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(calendarEvent)
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          console.error("❌ Calendar API error:", data.error);
+          
+          // Check if this is a permission/scope issue
+          if (data.error?.status === 'PERMISSION_DENIED' || 
+              data.error?.message?.includes('insufficient authentication scopes')) {
+            console.error("❌ Authentication scope issue detected");
+            // Get a new token with the right scopes by requesting interactive authentication
+            throw new Error('Calendar permission denied. Please reload the extension to authorize calendar access.');
+          }
+          
+          throw new Error(data.error?.message || 'Failed to add event to calendar');
+              }
+        
+        console.log("✅ Event added to calendar:", data);
+        
+        // Update the event in our cache to mark it as added
+        await markEventAsAdded(event.id);
+        
+        // Check if data has an id property before returning
+        if (!data.id) {
+          console.error("❌ Calendar API response missing ID:", data);
+          return { 
+            id: "unknown-id", 
+            exists: false,
+            success: true
+          };
         }
         
-        return { id: "existing-event", exists: true };
+        return data;
+      } catch (error) {
+        console.error("❌ Error adding event to calendar:", error);
+        throw error;
       }
-  
-      // Format the event for Google Calendar API
-      const calendarEvent = {
-        'summary': event.title,
-        'location': event.location || '',
-        'description': event.description || '',
-        'start': {
-          'dateTime': `${event.date}T${convertTimeToISO(event.time) || '09:00:00'}`,
-          'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-        },
-        'end': {
-          'dateTime': `${event.date}T${getEndTime(event.time) || '10:00:00'}`,
-          'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-        }
-      };
-      
-      console.log("🔄 Attempting to add event to calendar:", calendarEvent);
-      
-      // Call Google Calendar API to create event
-      const response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(calendarEvent)
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        console.error("❌ Calendar API error:", data.error);
-        
-        // Check if this is a permission/scope issue
-        if (data.error?.status === 'PERMISSION_DENIED' || 
-            data.error?.message?.includes('insufficient authentication scopes')) {
-          console.error("❌ Authentication scope issue detected");
-          // Get a new token with the right scopes by requesting interactive authentication
-          throw new Error('Calendar permission denied. Please reload the extension to authorize calendar access.');
-        }
-        
-        throw new Error(data.error?.message || 'Failed to add event to calendar');
-      }
-      
-      console.log("✅ Event added to calendar:", data);
-      
-      // Update the event in our cache to mark it as added
-      await markEventAsAdded(event.id);
-      
-      return data;
-    } catch (error) {
-      console.error("❌ Error adding event to calendar:", error);
-      throw error;
-    }
 }
+
   
 // Check and sync calendar events with extension
 export async function syncCalendarEvents(token) {
@@ -186,7 +193,7 @@ export async function syncCalendarEvents(token) {
         console.log("🔄 Starting calendar events sync...");
         
         // Get events from our cache
-        const ourEvents = await getEventsFromCache();
+        const ourEvents = await getEventsFromDB();
         if (!ourEvents || ourEvents.length === 0) {
             console.log("ℹ️ No events in cache to sync");
             return { synced: 0 };
@@ -217,6 +224,84 @@ export async function syncCalendarEvents(token) {
         return { synced: syncedCount };
     } catch (error) {
         console.error("❌ Error syncing calendar events:", error);
+        throw error;
+    }
+}
+
+// Add function to remove an event from Google Calendar
+export async function removeEventFromCalendar(token, event) {
+    try {
+        console.log("🔄 Attempting to remove event from calendar:", event.title);
+        
+        // First, find the event in Google Calendar
+        const eventDate = new Date(event.date);
+        if (isNaN(eventDate.getTime())) {
+            console.error("❌ Invalid event date:", event.date);
+            throw new Error("Invalid event date");
+        }
+        
+        // Set time range to search (the day of the event)
+        const startOfDay = new Date(eventDate);
+        startOfDay.setHours(0, 0, 0, 0);
+        
+        const endOfDay = new Date(eventDate);
+        endOfDay.setHours(23, 59, 59, 999);
+        
+        // Fetch calendar events for this day
+        const calendarEvents = await fetchCalendarEvents(
+            token, 
+            startOfDay.toISOString(), 
+            endOfDay.toISOString()
+        );
+        
+        // Find the matching event in Google Calendar
+        const matchingEvent = calendarEvents.find(calEvent => {
+            // Compare event titles (summary in Google Calendar)
+            const titleMatch = calEvent.summary?.toLowerCase() === event.title.toLowerCase();
+            
+            // Compare dates
+            let dateMatch = false;
+            if (calEvent.start?.dateTime) {
+                const calEventDate = new Date(calEvent.start.dateTime);
+                dateMatch = calEventDate.toDateString() === eventDate.toDateString();
+            } else if (calEvent.start?.date) {
+                const calEventDate = new Date(calEvent.start.date);
+                dateMatch = calEventDate.toDateString() === eventDate.toDateString();
+            }
+            
+            // Return true if both title and date match
+            return titleMatch && dateMatch;
+        });
+        
+        if (!matchingEvent) {
+            console.log("⚠️ Event not found in Google Calendar:", event.title);
+            // Update the event in our cache to mark it as not added
+            await markEventAsNotAdded(event.id);
+            return { success: false, message: "Event not found in Google Calendar" };
+        }
+        
+        // Delete the event from Google Calendar using its Google Calendar ID
+        const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${matchingEvent.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+        
+        if (response.status === 204 || response.status === 200) {
+            console.log("✅ Event removed from Google Calendar:", event.title);
+            
+            // Update the event in our cache to mark it as not added
+            await markEventAsNotAdded(event.id);
+            
+            return { success: true };
+        } else {
+            const errorData = await response.json();
+            console.error("❌ Error removing event from calendar:", errorData);
+            throw new Error(errorData.error?.message || 'Failed to remove event from calendar');
+        }
+    } catch (error) {
+        console.error("❌ Error removing event from calendar:", error);
         throw error;
     }
 }

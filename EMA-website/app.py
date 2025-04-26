@@ -93,6 +93,11 @@ def login():
 @app.route('/')
 def home():
     return render_template('index.html')
+from flask import send_from_directory
+
+@app.route('/download-extension')
+def download_extension():
+    return send_from_directory('static', 'ema-extension.zip', as_attachment=True)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

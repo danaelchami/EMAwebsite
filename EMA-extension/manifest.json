@@ -9,7 +9,8 @@
         "identity.email",
         "storage",
         "scripting",
-        "tabs"
+        "tabs",
+        "declarativeContent"
     ],
     "host_permissions": [
         "https://www.googleapis.com/",
@@ -22,6 +23,8 @@
       "scopes": [
         "https://www.googleapis.com/auth/gmail.readonly",
         "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/contacts.readonly",
         "https://www.googleapis.com/auth/calendar",
         "https://www.googleapis.com/auth/calendar.events",
         "https://www.googleapis.com/auth/gmail.send"
@@ -30,14 +33,22 @@
     },
     "background": {
       "service_worker": "background.js",
-      "type": "module"
+      "type": "module",
+      "persistence": true
     },
     "content_scripts": [
       {
         "matches": ["https://mail.google.com/*"],
         "js": ["content.js"],
-        "run_at": "document_end",
-        "all_frames": true
+        "run_at": "document_idle",
+        "all_frames": true,
+        "type": "module"
+      }
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": ["logo.png"],
+        "matches": ["https://mail.google.com/*"]
       }
     ],
     "action": {

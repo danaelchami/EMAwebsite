@@ -1,5 +1,30 @@
 // Fetch a list of email message IDs (single batch)
-export function fetchEmails(token, timeFilter = 'week', readFilter = 'all') {
+export async function fetchEmails(token, paramTimeFilter, paramReadFilter, paramAdditionalFilters) {
+    // Get settings from Chrome storage
+    const settings = await new Promise(resolve => {
+        chrome.storage.local.get(['emailSettings'], function(result) {
+            const defaultSettings = {
+                timePeriod: 'week',
+                status: 'all',
+                inboxOnly: true,
+                excludeOther: true,
+                excludePromotions: true,
+                excludeSocial: true
+            };
+            resolve(result.emailSettings || defaultSettings);
+        });
+    });
+    
+    // Use storage settings, but allow override from parameters if provided
+    const timeFilter = paramTimeFilter || settings.timePeriod;
+    const readFilter = paramReadFilter || settings.status;
+    const additionalFilters = paramAdditionalFilters || {
+        inboxOnly: settings.inboxOnly,
+        excludeOther: settings.excludeOther,
+        excludePromotions: settings.excludePromotions,
+        excludeSocial: settings.excludeSocial
+    };
+    
     let maxResults = 100; // Default max results
     
     // Build the query based on filters
@@ -36,15 +61,32 @@ export function fetchEmails(token, timeFilter = 'week', readFilter = 'all') {
       query += 'is:read';
     }
     
+    // Add inbox only filter
+    if (additionalFilters?.inboxOnly) {
+      if (query) query += ' ';
+      query += 'in:inbox';
+    }
+    
+    // Handle category exclusions
+    if (additionalFilters?.excludeOther) {
+      if (query) query += ' ';
+      query += '-category:updates -category:forums';
+    }
+    
+    if (additionalFilters?.excludePromotions) {
+      if (query) query += ' ';
+      query += '-category:promotions';
+    }
+    
+    if (additionalFilters?.excludeSocial) {
+      if (query) query += ' ';
+      query += '-category:social';
+    }
+    
     // If timeFilter is all and we want large number of results
     if (timeFilter === 'all') {
       maxResults = 200; // Increase max results for 'all' option
     }
-    if (query) {
-      query += ' in:inbox';
-    } else {
-      query = 'in:inbox';
-    }
     
     // Construct the URL with query parameters
     const url = `https://www.googleapis.com/gmail/v1/users/me/messages?maxResults=${maxResults}${query ? '&q=' + encodeURIComponent(query) : ''}`;

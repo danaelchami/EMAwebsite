@@ -11,10 +11,10 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "Poppins", "Montserrat", "Inter", sans-serif;
+      font-family: "Inter", sans-serif;
     }
  
-    body {
+     body {
   height: 700px;
   width: 500px;
   background: linear-gradient(-45deg, #b0cfe6, #ea98f1, #8cc9ac, #f0bdd7);
@@ -27,19 +27,17 @@
   font-family: "Poppins", sans-serif;
 }
 
-
-
     /* Main container for all content */
     .container {
       width: 95%;
       max-width: 550px;
       margin: 20px auto;
-      background-color: rgba(255, 255, 255, 0.9); /* More opaque for better readability */
+      background-color: rgba(255, 255, 255,0.9); /* More opaque for better readability */
       border-radius: 16px;
       padding: 24px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
       position: relative;
       backdrop-filter: blur(10px);
+      
     }
 
     /* Header section */
@@ -62,25 +60,20 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      
     }
 
     .header h1 {
       font-size: 1.8rem;
       margin-bottom: 8px;
-      color: #b1aaaa;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      background: linear-gradient(90deg, #6366f1, #ec4899);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #7aae81;
       font-weight: 600;
       letter-spacing: -0.5px;
     }
 
     .header p {
       font-size: 1rem;
-      color: #4b4b4b;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      color: #5c5454;
       font-weight: 300;
     }
 
@@ -93,7 +86,6 @@
       background-color: white;
       border-radius: 12px;
       padding: 14px 18px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .filter-group {
@@ -124,8 +116,7 @@
     }
     
     .email-filter:focus {
-      border-color: #6366f1;
-      box-shadow: 0 0 0 2px rgba(110, 231, 215, 0.2);
+      border-color: #7d93ef;
       outline: none;
     }
 
@@ -133,24 +124,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      background-color: #7d93ef;
       border: none;
       padding: 10px 14px;
-      margin: 0 auto;
       display: block;
     
       cursor: pointer;
       color: white;
       transition: all 0.3s ease;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(99, 241, 158, 0.3);
       white-space: nowrap;
     }
 
     .refresh-button:hover {
-      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      background-color: #6680e3;
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.4);
     }
 
     .refresh-button svg {
@@ -160,7 +148,10 @@
     .small-refresh-button {
       padding: 6px;
       border-radius: 6px;
-      margin-left: 6px;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .small-refresh-button svg {
@@ -173,7 +164,7 @@
       background-color: white;
       border-radius: 16px;
       padding: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      
     }
 
     .summary-section h3 {
@@ -181,10 +172,7 @@
       margin-bottom: 12px;
       border-bottom: 1px solid #f0f0f0;
       padding-bottom: 8px;
-      background: linear-gradient(90deg, #6366f1, #ec4899);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #7d93ef;
       font-weight: 600;
       letter-spacing: -0.3px;
     }
@@ -233,7 +221,7 @@
       content: "•";
       position: absolute;
       left: 0;
-      color: #8b5cf6;
+      color: #7aae81;
     }
 
     /* Calendar events section */
@@ -242,7 +230,6 @@
       background-color: white;
       border-radius: 16px;
       padding: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .calendar-events-section h3 {
@@ -253,10 +240,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: linear-gradient(90deg, #6366f1, #ec4899);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #f67c79;
       font-weight: 600;
       letter-spacing: -0.3px;
     }
@@ -266,7 +250,7 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      color: #6366f1;
+      color: #7d93ef;
     }
 
     .calendar-events-section h3 .refresh-events svg {
@@ -291,7 +275,7 @@
     }
     
     .calendar-events-content::-webkit-scrollbar-thumb {
-      background: linear-gradient(to bottom, #6366f1, #ec4899);
+      background-color: #7d93ef;
       border-radius: 10px;
     }
 
@@ -307,26 +291,61 @@
       background-color: #f9f9f9;
       margin-bottom: 12px;
       padding: 14px;
-      border-left: 4px solid #6366f1;
+      border-left: 4px solid #7d93ef;
       position: relative;
       transition: all 0.2s ease;
     }
     
     .event-item:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     }
 
     .event-item.added {
       opacity: 0.7;
-      border-left-color: #22c55e;
+      border-left-color: #7aae81;
     }
 
+    /* Styling for event-header to position title and delete button */
+    .event-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 5px;
+      position: relative;
+    }
+
+    /* Styling for the small X delete button */
+    .delete-event-x {
+      background: transparent;
+      border: none;
+      color: #666;
+      font-size: 18px;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      
+      transition: all 0.2s ease;
+      border-radius: 50%;
+    }
+
+    .delete-event-x:hover {
+      background: #f0f0f0;
+      background-color: #dddddd;
+      
+      
+    }
+
+    /* Update event-title to work with the new layout */
     .event-title {
       font-weight: bold;
       font-size: 0.95rem;
-      margin-bottom: 5px;
       color: #333;
+      flex: 1;
+      padding-right: 5px;
     }
 
     .event-info {
@@ -348,7 +367,7 @@
       width: 12px;
       height: 12px;
       margin-right: 4px;
-      color: #6366f1;
+      color: #7d93ef;
     }
 
     .event-time {
@@ -380,7 +399,7 @@
 
     .add-to-calendar,
     .show-email {
-      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      background-color: #7d93ef;
       color: white;
       border: none;
       border-radius: 8px;
@@ -390,7 +409,6 @@
       display: flex;
       align-items: center;
       transition: all 0.2s ease;
-      box-shadow: 0 2px 5px rgba(99, 102, 241, 0.3);
     }
 
     .add-to-calendar svg,
@@ -402,28 +420,83 @@
 
     .add-to-calendar:hover,
     .show-email:hover {
+      background-color: #6680e3;
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.4);
     }
 
     .add-to-calendar:disabled {
-      background: linear-gradient(90deg, #c2c9e7, #d0d6ef);
+      background-color: #d0d6ef;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .show-email {
+      background-color: #7aae81;
+    }
+
+    .show-email:hover {
+      background-color: #4d9a56;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .remove-from-calendar {
+      background-color: #f67c79;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+      
+    }
+
+    .remove-from-calendar:hover {
+      background-color: #e85f5c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .remove-from-calendar:disabled {
+      background-color: #f6a8a6;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
-
-    .show-email {
-      background: linear-gradient(90deg, #22c55e, #16a34a);
-      box-shadow: 0 2px 5px rgba(34, 197, 94, 0.3);
+    
+    .remove-from-calendar svg {
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
     }
 
-    .show-email:hover {
-      box-shadow: 0 4px 8px rgba(34, 197, 94, 0.4);
+    .delete-event {
+      background-color: #666;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .delete-event:hover {
+      background-color: #666;
+    }
+
+    .delete-event svg {
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
     }
 
     .event-added-badge {
-      background-color: #22c55e;
+      background-color: #7aae81;
       color: white;
       padding: 3px 8px;
       border-radius: 6px;
@@ -449,6 +522,45 @@
     .events-control input[type="checkbox"] {
       margin-right: 6px;
     }
+    
+    /* Styling for event view filter controls */
+    .events-filter-controls {
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .events-view-options {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: #666;
+    }
+    
+    .view-option {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 3px 8px;
+      border-radius: 15px;
+      transition: all 0.2s;
+    }
+    
+    .view-option:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .view-option.active {
+      background-color: #e6ecff;
+      font-weight: 500;
+      color: #5262c7;
+    }
+    
+    .view-option input[type="radio"] {
+      margin-right: 5px;
+    }
 
     .spinning {
       animation: spin 1.5s linear infinite;
@@ -465,7 +577,6 @@
       background-color: white;
       border-radius: 16px;
       padding: 0;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       display: flex;
       flex-direction: column;
       height: 300px;
@@ -473,7 +584,7 @@
     }
 
     .chat-header {
-      background: linear-gradient(90deg,  #67e983,#9193f3, #e476ad,#67e983);
+      background-image: linear-gradient(45deg, #94a8f5,#f67c79 ,#6680e3);
       color: white;
       padding: 14px 18px;
       font-size: 1.1rem;
@@ -499,7 +610,7 @@
     }
     
     .chatbox::-webkit-scrollbar-thumb {
-      background: linear-gradient(to bottom, #6366f1, #ec4899);
+      background-color: #44a9f1;
       border-radius: 10px;
     }
 
@@ -511,18 +622,17 @@
       font-size: 0.9rem;
       position: relative;
       margin-bottom: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 
     .user {
-      background: linear-gradient(135deg, #e2e8f0, #f1f5f9);
+      background-color: #f1f5f9;
       color: #333;
       align-self: flex-end;
       border-bottom-right-radius: 5px;
     }
 
     .bot {
-      background: linear-gradient(135deg, #ede9fe, #f5f3ff);
+      background-color: #dfedf8;
       color: #333;
       align-self: flex-start;
       border-bottom-left-radius: 5px;
@@ -545,12 +655,11 @@
     }
 
     .chat-input:focus {
-      border-color: #6366f1;
-      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+      border-color: #acdff6;
     }
 
     .send-button, .mic-button {
-      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      background-color: #44a9f1;
       color: white;
       border: none;
       width: 40px;
@@ -562,12 +671,12 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 5px rgba(99, 102, 241, 0.3);
     }
 
     .send-button:hover, .mic-button:hover {
+      background-color: #44a9f1;
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .send-button svg, .mic-button svg {
@@ -576,21 +685,169 @@
     }
     
     .mic-button.active {
-      background: linear-gradient(90deg, #ef4444, #dc2626);
+      background-color: #f67c79;
       animation: pulse 1.5s infinite;
-      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      box-shadow: 0 0 0 0 rgba(246, 124, 121, 0.7);
     }
     
     @keyframes pulse {
       0% {
-        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+        box-shadow: 0 0 0 0 rgba(246, 124, 121, 0.7);
       }
       70% {
-        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+        box-shadow: 0 0 0 10px rgba(246, 124, 121, 0);
       }
       100% {
-        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+        box-shadow: 0 0 0 0 rgba(246, 124, 121, 0);
       }
+    }
+    
+    /* Settings button and modal */
+    .settings-button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: #44a9f1;
+      border: none;
+      cursor: pointer;
+      color: white;
+      opacity: 0.9;
+      transition: all 0.2s ease;
+      padding: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    }
+    
+    .settings-button:hover {
+      opacity: 1;
+      background-color: #44a9f1;
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .settings-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: flex-start; /* This moves content to the top */
+      justify-content: center; /* Keep this if you want horizontal center */
+      padding-top: 50px; /* Optional: add some spacing from the very top */
+    }
+    
+    .settings-content {
+      background: white;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      animation: modalFadeIn 0.3s ease-out;
+      overflow: visible;
+    }
+    
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .settings-header h3 {
+      margin: 0;
+      color: #44a9f1;
+      font-size: 1.2rem;
+    }
+    
+    .close-settings {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #666;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .close-settings:hover {
+      background: #f0f0f0;
+      color: #333;
+    }
+    
+    .settings-group {
+      margin-bottom: 15px;
+    }
+    
+    .settings-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #555;
+    }
+    
+    .settings-select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      background-color: white;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+    
+    .settings-checkbox {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .settings-checkbox input {
+      margin-right: 8px;
+    }
+    
+    .settings-apply {
+      background-color: #44a9f1;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+    }
+    
+    .settings-apply:hover {
+      background-color: #44a9f1;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     
     /* Helper for visually hiding elements but keeping them accessible */
@@ -624,7 +881,7 @@
 
     .email-link {
       display: inline-block;
-      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      background-color: #7d93ef;
       color: white;
       text-decoration: none;
       padding: 6px 12px;
@@ -632,18 +889,18 @@
       margin-top: 5px;
       font-size: 0.85rem;
       transition: all 0.2s ease;
-      box-shadow: 0 2px 5px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     }
 
     .email-link:hover {
-      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      background-color: #6680e3;
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     
     /* Styling for the View All Fetched Emails button */
     #open-emails-page {
-      background: linear-gradient(90deg, #6366f1, #ec4899);
+      background-color: #f67c79;
       color: white;
       border: none;
       padding: 10px 20px;
@@ -655,6 +912,7 @@
     }
     
     #open-emails-page:hover {
+      background-color: #e85f5c;
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
@@ -663,7 +921,7 @@
     #hide-emails-btn {
       display: none;
       margin-top: 10px;
-      background: linear-gradient(90deg, #64748b, #94a3b8);
+      background-color: #44a9f1;
       color: white;
       border: none;
       padding: 8px 16px;
@@ -675,21 +933,174 @@
     }
     
     #hide-emails-btn:hover {
+      background-color: #3399e6;
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
-    @keyframes animatedGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
 
+    /* Email marker styling */
+    .email-marker-container {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+    }
+    
+    .email-marker {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    
+    .email-marker:hover {
+      transform: scale(1.2);
+    }
+    
+    /* Summary bubble styling */
+    .summary-bubble {
+      position: fixed;
+      z-index: 1000;
+      max-width: 300px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+    }
+    
+    .summary-bubble-content {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .summary-bubble-header {
+      background-color: #7d93ef;
+      color: white;
+      padding: 8px 12px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .summary-bubble-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    
+    .summary-bubble-body {
+      padding: 12px;
+      font-size: 14px;
+      color: #333;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    /* Styling for the floating/undated events section */
+    .floating-events-header {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px dashed #ccc;
+    }
+    
+    .floating-events-header h4 {
+      color: #7d93ef;
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+    
+    .undated-count {
+      background-color: #7d93ef;
+      color: white;
+      font-size: 0.7rem;
+      border-radius: 10px;
+      padding: 2px 8px;
+      margin-left: 8px;
+    }
+    
+    .floating-events-info {
+      color: #888;
+      font-size: 0.8rem;
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+    
+    .undated-events .event-item {
+      border-left: 4px solid #7d93ef;
+      border-style: dashed;
+      border-color:#e7e7e7;
+      background-color: #f9f9f9;
+      position: relative;
+    }
+    
+    .undated-events .event-item:before {
+      content: "";
+      position: absolute;
+      left: -10px;
+      top: 15px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #7d93ef;
+    }
+    
+    .undated-events .event-date {
+      color: #7d93ef;
+      font-style: italic;
+    }
+
+    /* Loading indicator for chat */
+    .loading-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      padding: 5px;
+    }
+
+    .loading-dots span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: #44a9f1;
+      border-radius: 50%;
+      animation: bounce 1.5s infinite ease-in-out;
+    }
+
+    .loading-dots span:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .loading-dots span:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+
+    @keyframes bounce {
+      0%, 80%, 100% { 
+        transform: scale(0);
+      } 
+      40% { 
+        transform: scale(1.0);
+      }
+    }
+
+    /* Style for disabled add to calendar button */
+    .add-to-calendar.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background-color: #f0f0f0;
+      color: #888;
+    }
+    
+    .add-to-calendar.disabled:hover {
+      background-color: #f0f0f0;
+      transform: none;
+      box-shadow: none;
+    }
   </style>
 
 </head>
@@ -701,39 +1112,77 @@
       </div>
       <h1>Enhanced Mail Assistant</h1>
       <p>Your personalized email summary</p>
+      
+      <!-- Settings button -->
+      <button id="settings-button" class="settings-button" title="Settings">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
     </div>
 
-    <!-- Email selection options -->
-    <div class="email-options">
-      <div class="filter-group">
-        <label for="email-filter">Time period:</label>
-        <select id="email-filter" class="email-filter">
-          <option value="week">Past week</option>
-          <option value="month">Past month</option>
-          <option value="year">Past year</option>
-          <option value="all">All emails</option>
-        </select>
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="settings-modal">
+      <div class="settings-content">
+        <div class="settings-header">
+          <h3>Email Settings</h3>
+          <button id="close-settings" class="close-settings">×</button>
+        </div>
+        
+        <div class="settings-group">
+          <label for="settings-time-period">Time Period</label>
+          <select id="settings-time-period" class="settings-select">
+            <option value="week">Past week</option>
+            <option value="month">Past month</option>
+            <option value="year">Past year</option>
+            <option value="all">All emails</option>
+          </select>
+        </div>
+        
+        <div class="settings-group">
+          <label for="settings-status">Status</label>
+          <select id="settings-status" class="settings-select">
+            <option value="all">All</option>
+            <option value="unread">Unread only</option>
+            <option value="read">Read only</option>
+          </select>
+        </div>
+        
+        <div class="settings-group">
+          <label>Additional Filters</label>
+          
+          <div class="settings-checkbox">
+            <input type="checkbox" id="settings-inbox-only" checked>
+            <label for="settings-inbox-only">Inbox emails only (recommended)</label>
+          </div>
+          
+          <div class="settings-checkbox">
+            <input type="checkbox" id="settings-exclude-other">
+            <label for="settings-exclude-other">Exclude "Other" category</label>
+          </div>
+          
+          <div class="settings-checkbox">
+            <input type="checkbox" id="settings-exclude-promotions">
+            <label for="settings-exclude-promotions">Exclude "Promotions" category</label>
+          </div>
+          
+          <div class="settings-checkbox">
+            <input type="checkbox" id="settings-exclude-social">
+            <label for="settings-exclude-social">Exclude "Social" category</label>
+          </div>
+        </div>
+        
+        <button id="settings-apply" class="settings-apply">Apply Settings</button>
+        
+
       </div>
-      
-      <div class="filter-group">
-        <label for="read-filter">Status:</label>
-        <select id="read-filter" class="read-filter">
-          <option value="all">All</option>
-          <option value="unread">Unread only</option>
-          <option value="read">Read only</option>
-        </select>
-      </div>
-      
-      <button id="refresh-emails" class="refresh-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
-        Refresh
-      </button>
     </div>
 
     <!-- Email Summary Section -->
     <div class="summary-section">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3>Email Summary</h3>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">
+        <h3 style="margin: 0; border-bottom: none; padding-bottom: 0;">Email Summary</h3>
         <button id="refresh-summary" class="refresh-button small-refresh-button" title="Regenerate summary">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
         </button>
@@ -752,25 +1201,25 @@
 
     <!-- Fetch All Emails Page Button -->
 <div style="text-align: center; margin-top: 10px;">
-  <button id="open-emails-page">
+      <button id="open-emails-page" title="Uses your current email settings from the settings panel">
      View All Fetched Emails
   </button>
+      <div style="font-size: 0.75rem; color: #777; margin-top: 5px;">
+        Uses filters from your current settings
+      </div>
 </div>
 <button id="hide-emails-btn">
   Hide Emails
 </button>
 
-
-
     <!-- Calendar Events Section -->
     <div class="calendar-events-section">
-      <h3>
-        Possible Calendar Events
-        <span class="refresh-events" id="refresh-events">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
-          Refresh
-        </span>
-      </h3>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">
+        <h3 style="margin: 0; border-bottom: none; padding-bottom: 0; color: #7d93ef;">Extracted Calendar Events </h3>
+        <button id="refresh-events" class="refresh-button small-refresh-button" title="Refresh calendar events">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+        </button>
+      </div>
       <div id="calendar-events" class="calendar-events-content">
         <p class="events-placeholder">Scanning emails for calendar events...</p>
       </div>

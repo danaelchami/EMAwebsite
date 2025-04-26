@@ -46,12 +46,21 @@
                 <h1>A smarter way to manage your email</h1>
                 <p>EMA uses artificial intelligence to summarize emails, extract calendar events, and help you respond faster—all right within your inbox.</p>
                 <div class="hero-cta">
-                    <a href="{{ url_for('login') }}" class="button primary-button">Add to Chrome</a>
-
+                    <a href="{{ url_for('static', filename='EMA-extension.zip') }}" download class="button primary-button">
+                        Download EMA Chrome Extension
+                      </a>
+                      <p style="margin-top: 10px; font-size: 14px;">
+                        <strong>How to install:</strong><br>
+                        1. Download and unzip the extension<br>
+                        2. Go to <code>chrome://extensions/</code><br>
+                        3. Enable <strong>Developer mode</strong> (top right)<br>
+                        4. Click “Load Unpacked” and select the unzipped folder
+                      </p>
+                      
                 </div>
             </div>
             <div class="hero-image">
-                <img src="{{ url_for('static', filename='images/hero-image.png') }}" alt="EMA in action">
+                <img src="{{ url_for('static', filename='images/hero-image.PNG') }}" alt="EMA in action">
 
             </div>
         </section>
@@ -106,13 +115,12 @@
                 <h2>Designed for simplicity and efficiency</h2>
                 <p>EMA integrates seamlessly with your email workflow, offering powerful features without compromising the user experience.</p>
             </div>
-            <div class="demo-video">
-                <img src="{{ url_for('static', filename='images/demo-placeholder.jpg') }}" alt="EMA demo" class="video-placeholder">
-
-                <div class="play-button">
-                    <i class="fas fa-play"></i>
-                </div>
-            </div>
+            <video width="100%" controls autoplay muted playsinline>
+                <source src="static/videos/demo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              
+            
         </section>
   
     <div class="section-divider"></div>

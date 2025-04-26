@@ -1,5 +1,5 @@
 // geminiApi.js
-import { getSummaryFromCache, storeSummaryInCache, getEventsFromCache, storeEventsInCache } from './storage.js';
+import { getSummaryFromDB, storeSummaryInDB, getEventsFromDB, storeEventsInCache } from './storage.js';
 import { createBasicEventsFromEmails } from './utils.js';
 import { fetchEmailContent } from './gmailApi.js';
 import { authenticateUser } from './auth.js';
@@ -40,7 +40,7 @@ export async function summarizeEmails(emails, options = {}) {
       // Only check cache if we're not forcing regeneration and filter hasn't changed
       if (!forceRegenerate && !filterChanged) {
         // Check if we have a cached summary - with a timeout
-        const cachedSummaryPromise = getSummaryFromCache(emails);
+        const cachedSummaryPromise = getSummaryFromDB(emails);
         const timeoutPromise = new Promise((_, reject) => 
           setTimeout(() => reject(new Error('Cache timeout')), 2000)
         );
@@ -73,8 +73,8 @@ export async function summarizeEmails(emails, options = {}) {
         
         if (detailedSummary) {
           // Store the detailed summary in cache for future use
-          storeSummaryInCache(emails, detailedSummary).catch(err => 
-            console.error("Failed to store summary in cache:", err)
+          storeSummaryInDB(emails, detailedSummary).catch(err => 
+            console.error("Failed to store summary in DB:", err)
           );
           
           // Return the detailed summary
@@ -110,7 +110,7 @@ function generateBasicSummary(emails) {
 // Helper function to generate a detailed summary using Gemini API
 async function generateDetailedSummary(emails) {
     try {
-      const emailContent = emails.map(email => email.snippet).join("\n\n");
+      const emailContent = emails.map(email => email.data?.payload?.body?.data || email.snippet || "").join("\n\n");
       
       const prompt = `Create an extremely concise summary of these emails in 2-3 short sentences only.
       Focus ONLY on the most critical information.
@@ -129,7 +129,7 @@ async function generateDetailedSummary(emails) {
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
           temperature: 0.2,
-          maxOutputTokens: 50,
+          maxOutputTokens: 100,
           topP: 0.8,
           topK: 40
         }
@@ -176,10 +176,10 @@ export async function extractCalendarEvents(emails, options = {}) {
       // Get cached events
       let cachedEvents = [];
       try {
-        cachedEvents = await getEventsFromCache() || [];
-        console.log(`🎯 Retrieved ${cachedEvents.length} events from cache`);
+        cachedEvents = await getEventsFromDB() || [];
+        console.log(`🎯 Retrieved ${cachedEvents.length} events from DB`);
       } catch (cacheError) {
-        console.error("❌ Error retrieving cached events:", cacheError);
+        console.error("❌ Error retrieving events from DB:", cacheError);
         cachedEvents = [];
       }
       
@@ -207,25 +207,6 @@ export async function extractCalendarEvents(emails, options = {}) {
         return cachedEvents;
       }
       
-      // Check if we've hit the API rate limit
-      const rateLimitKey = 'gemini_rate_limited';
-      const rateLimitStatus = await new Promise(resolve => {
-        chrome.storage.local.get([rateLimitKey], result => {
-          resolve(result[rateLimitKey]);
-        });
-      });
-  
-      // If we've hit the rate limit within the last hour, return cached events
-      if (rateLimitStatus) {
-        const now = Date.now();
-        if (now - rateLimitStatus < 3600000) { // 1 hour
-          console.warn("⚠️ Gemini API rate limited - returning cached events");
-          return cachedEvents;
-        } else {
-          // Reset the rate limit status if it's been more than an hour
-          chrome.storage.local.remove([rateLimitKey]);
-        }
-      }
       
       // Process each new email individually
       let newEvents = [];
@@ -336,7 +317,7 @@ export async function extractCalendarEvents(emails, options = {}) {
         // Build prompt for this specific email
         const prompt = `Extract all dates, times, and events from this email. 
         For each event, please provide:
-        1. Title of the event (add with who if important)
+        1. Title of the event (add with who if meeting)
         2. Date (in YYYY-MM-DD format) if only the year is not mentioned, set it to ${emailSentDate.getFullYear()}
         3. Time (if available)
         4. Location (if available)
@@ -480,13 +461,14 @@ export async function extractCalendarEvents(emails, options = {}) {
           });
         } catch (storageError) {
           console.error("❌ Error storing events in cache:", storageError);
-          // Store in local storage as fallback
-          chrome.storage.local.set({ events: allEvents }, () => {
-            // Notify UI that new events are available (even in fallback case)
-            chrome.runtime.sendMessage({
-              action: "eventsUpdated",
-              events: allEvents
-            });
+          
+          // This should now only happen if both IndexedDB and Chrome Storage failed
+          console.error("❌ Both storage methods failed:", storageError);
+          
+          // Notify UI with the events we have anyway
+          chrome.runtime.sendMessage({
+            action: "eventsUpdated",
+            events: allEvents
           });
         }
       }
@@ -597,77 +579,5 @@ export async function summarizeWithGemini(prompt) {
   } catch (err) {
     console.error("Gemini API error:", err);
     return null;
-  }
-}
-export async function interpretUserMessage(message) {
-  const today = new Date().toISOString().split('T')[0]; // e.g., "2025-05-02"
-  const GEMINI_API_KEY = "AIzaSyBhlM0p5vFbeG0uR9oqb66ya2Gd8NuY6Ks";
-  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`;
-
-  const prompt = `
-Today’s date is ${today}.
-
-You're EMA, a smart assistant. When the user wants to create a calendar event, extract the intent and return structured JSON like:
-
-{
-  "intent": "create_event",
-  "reply": "Got it! I'm adding the event to your calendar.",
-  "eventDetails": {
-    "title": "Call with Alex",
-    "date": "2025-05-03",
-    "time": "15:00"
-  }
-}
-
-If it's not a calendar request, respond like:
-
-{
-  "reply": "Here's your regular response."
-}
-
-User: "${message}"
-`;
-
-  const body = {
-    contents: [{ parts: [{ text: prompt }] }],
-    generationConfig: {
-      temperature: 0.2,
-      maxOutputTokens: 300,
-      topP: 0.8,
-      topK: 40,
-    }
-  };
-
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-
-    const data = await res.json(); // ✅ NOW data is defined
-
-    const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    console.log("🧠 Raw Gemini reply:", raw);
-
-    // Clean the response string
-    // Extract clean JSON block only
-const firstBrace = raw.indexOf('{');
-const lastBrace = raw.lastIndexOf('}');
-const jsonBlock = raw.slice(firstBrace, lastBrace + 1);
-
-// Optional: remove comments inside
-const jsonClean = jsonBlock.replace(/\/\/.*$/gm, '').trim();
-
-// Parse the cleaned JSON block
-const parsed = JSON.parse(jsonClean);
-
-
-    
-    return parsed;
-
-  } catch (err) {
-    console.error("❌ Failed to parse Gemini reply:", err);
-    return { reply: "Sorry, I couldn’t understand your request." };
   }
 }
